@@ -1,0 +1,9 @@
+{
+  "name": "conle",
+  "description": "Plugins and extensions from Conle for Claude",
+  "owner": {
+    "name": "Conle",
+    "url": "https://conle.ai"
+  },
+  "plugins": []
+}
