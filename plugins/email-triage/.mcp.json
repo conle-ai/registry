@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "email-triage": {
+      "command": "/bin/bash",
+      "args": ["-c", "exec \"$HOME/.local/bin/triage\" mcp"]
+    }
+  }
+}

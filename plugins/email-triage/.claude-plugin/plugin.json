@@ -1,0 +1,8 @@
+{
+  "name": "email-triage",
+  "displayName": "Email Triage",
+  "version": "0.3.1",
+  "description": "Daily email triage agent: reads unread Gmail against the last 3 business days and next 2 weeks of Google Calendar, then sends a text-sized WhatsApp debrief. Includes guided onboarding, briefing customization, and admin skills.",
+  "author": { "name": "Conle", "url": "https://conle.ai" },
+  "keywords": ["email", "gmail", "calendar", "triage", "whatsapp", "briefing"]
+}
