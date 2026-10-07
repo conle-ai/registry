@@ -1,8 +1,20 @@
 {
   "name": "email-triage",
   "displayName": "Email Triage",
-  "version": "1.0.0",
-  "description": "A short morning debrief of your inbox: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Runs inside Claude with your Gmail and Google Calendar connectors on a weekday schedule. Nothing to install on your computer.",
-  "author": { "name": "Conle", "url": "https://conle.ai" },
-  "keywords": ["email", "gmail", "calendar", "triage", "briefing"]
+  "version": "1.1.0",
+  "description": "A short morning debrief of your inbox, texted to you by iMessage: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors on a weekday schedule.",
+  "author": {
+    "name": "Conle",
+    "url": "https://conle.ai"
+  },
+  "keywords": [
+    "email",
+    "gmail",
+    "calendar",
+    "triage",
+    "briefing",
+    "imessage",
+    "tasks",
+    "kanban"
+  ]
 }

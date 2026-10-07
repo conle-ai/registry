@@ -9,7 +9,7 @@
     {
       "name": "email-triage",
       "source": "./plugins/email-triage",
-      "description": "A short morning debrief of your inbox: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Runs inside Claude with your Gmail and Google Calendar connectors on a weekday schedule. Nothing to install on your computer."
+      "description": "A short morning debrief of your inbox, texted to you by iMessage: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors on a weekday schedule."
     }
   ]
 }

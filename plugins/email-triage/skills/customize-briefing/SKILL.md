@@ -1,6 +1,6 @@
 ---
 name: customize-briefing
-description: Change how the morning email debrief works. Always flag or mute people, companies, domains or topics, add a rule, change the length, or change the time it arrives. Edits preferences.md in the Email Debrief project and, for time changes, the "Email debrief" scheduled task. Use when the user says things like "stop showing me Shopify receipts", "always flag anything from Northwind", "make it shorter" or "send it at 6:30".
+description: Change how the morning email debrief works. Always flag or mute people, companies, domains or topics, add a rule, change the length, change the time it arrives, or change the iMessage number or task board it uses. Edits preferences.md in the Email Debrief project and, for time changes, the "Email debrief" scheduled task. Use when the user says things like "stop showing me Shopify receipts", "always flag anything from Northwind", "make it shorter" or "send it at 6:30".
 argument-hint: "[what to change, optional]"
 ---
 
@@ -25,6 +25,8 @@ If they said what to change, make only that change. If they didn't, ask what the
 | "Call me X" | Change **Owner** |
 | "Send it at 6:30", "move it to 8", "not on Mondays" | Change **Run time**, then update the scheduled task (step 4) |
 | "I've moved to New York" | Change **Time zone**, then update the scheduled task |
+| "Text it to a different number", "stop texting me" | Change **Deliver to** (`iMessage <address>` or `notification only`). Send one test iMessage to a new address and ask them to confirm it arrived. If delivery switches between iMessage and notification only, the scheduled task has to move too (step 4) |
+| "Use this sheet as my task board", "start a new board" | Change **Task board**, following `task-board.md` in the daily-debrief skill. Never delete the old board |
 | "Stop flagging X" or "unmute X" | Remove that line |
 
 - Use their words. Prefer a specific sender, company or domain over a vague topic.
@@ -38,6 +40,8 @@ Write `preferences.md` back whole to the same path, with every other line unchan
 ## 4. Time changes
 
 Find the scheduled task named **Email debrief** with the scheduled-task tools, and update its schedule to the new time and time zone (for example `CRON_TZ=Europe/London 30 6 * * 1-5`). Keep its prompt as it is. If you can't change it from here, tell them to open the task's settings in Claude and change the time there.
+
+When delivery switches to iMessage, the task must run on their Mac ("require this computer" on), because that's where the iMessage connector is. When it switches to notification only, it can run in the cloud. If you can't change that setting, tell them where it is in the task's settings.
 
 ## 5. Offer a preview
 
