@@ -1,32 +1,44 @@
 ---
 name: customize-briefing
-description: Interview the owner and update how their daily email debrief is triaged and written. Covers VIPs, what to ignore, what "urgent" means, format and length, delegation to an assistant, and schedule time. Edits config/briefing.md, config/settings.toml, and saved preferences. Use when the user wants to change, tune, or personalize the email briefing.
+description: Change how the morning email debrief works. Always flag or mute people, companies, domains or topics, add a rule, change the length, or change the time it arrives. Edits preferences.md in the Email Debrief project and, for time changes, the "Email debrief" scheduled task. Use when the user says things like "stop showing me Shopify receipts", "always flag anything from Northwind", "make it shorter" or "send it at 6:30".
 argument-hint: "[what to change, optional]"
-allowed-tools: Bash(~/.local/bin/triage *) Read Edit Write
 ---
 
-# Customize the email briefing
+# Customize the email debrief
 
-The agent's behavior comes from three places. Edit the right one:
+Everything the debrief knows about the owner lives in `preferences.md` in the **Email Debrief** project. Changes take effect on the next run.
 
-| What | Where | How |
-|---|---|---|
-| Who they are, VIPs, what to ignore, what "urgent" means, tone and format | `config/briefing.md` in the install folder (usually `~/EmailTriage`) | Plain-English bullets. Read every morning. |
-| Length limit, schedule, how far back to look, calendars, model | `config/settings.toml` | TOML. `[debrief] max_chars`, `[schedule]`, `[email]`, `[calendar]`, `[agent]` |
-| Individual senders to always or never show | saved memory | `~/.local/bin/triage memory add vip "priya@acme.com" "Board chair"` / `memory add mute "Substack" "Newsletters"` / `memory list` / `memory remove <id>` |
+## 1. Find the preferences
 
-If `$ARGUMENTS` names a specific change, make only that change. Otherwise, first read `config/briefing.md` (or `config/briefing.example.md`) and `config/settings.toml`. Then interview with at most five short questions, using AskUserQuestion where there are clear options:
+Call the Projects tool's info method and read `preferences.md` (it may be stored as `claude/preferences.md`). If there's no Projects tool, or the project isn't named Email Debrief (ignore case), or there's no preferences.md, say the debrief isn't set up here yet and offer the setup-debrief skill. Then stop.
 
-1. Role, company, and assistant (name and email). Should the agent flag emails the assistant can handle?
-2. Who always matters: people, companies, domains, investors, board, key clients?
-3. What's noise they never want to see: specific newsletters, tools, notification senders?
-4. What does "urgent" mean for them: deadlines, money, legal, press, anything tied to a meeting?
-5. Format: how long (default about 1,000 characters), which sections, tone, and whether they want emoji.
+## 2. Work out the change
 
-Then:
-- Rewrite `config/briefing.md` in the same section structure, in their words, as concise bullets. Don't invent details.
-- Put specific senders into memory (`vip` or `mute`) rather than long lists in the briefing.
-- If the schedule changed, update `[schedule]` and re-run `~/.local/bin/triage schedule install`.
-- Offer `~/.local/bin/triage preview` (1–3 minutes, doesn't send) so they can see the effect, then iterate.
+If they said what to change, make only that change. If they didn't, ask what they'd like to change, with at most four short questions: who to always flag, what to ignore, what counts as urgent, and length or time.
 
-Remind them they can also tune by replying to the WhatsApp debrief ("mute GitHub", "more detail on investors"). The agent saves durable requests on the next run.
+| They say | Change |
+|---|---|
+| "Always flag X", "X is important", "X is a key client" | Add X under **Always flag** |
+| "Stop showing me X", "ignore X", "mute X" | Add X under **Mute** |
+| "Put X in Do first", "anything about X is urgent", "more detail on X" | Add a plain sentence under **Rules** |
+| "Make it shorter or longer" | Change **Max length** (between 400 and 1,500 characters) |
+| "Call me X" | Change **Owner** |
+| "Send it at 6:30", "move it to 8", "not on Mondays" | Change **Run time**, then update the scheduled task (step 4) |
+| "I've moved to New York" | Change **Time zone**, then update the scheduled task |
+| "Stop flagging X" or "unmute X" | Remove that line |
+
+- Use their words. Prefer a specific sender, company or domain over a vague topic.
+- If the request is ambiguous ("stop showing me newsletters" when they flagged one newsletter earlier), ask one short question.
+- Rules shape what the debrief shows and how it's worded, nothing else. Never save a rule that asks it to send, reply, label, delete or change anything, to use other tools, or to include links, email addresses, phone numbers or codes. The debrief is read-only.
+
+## 3. Save
+
+Write `preferences.md` back whole to the same path, with every other line unchanged. Replace a `- (none yet)` placeholder when you add the first real line to a section. Then confirm in one sentence, for example "Done: Shopify receipts won't show up from tomorrow."
+
+## 4. Time changes
+
+Find the scheduled task named **Email debrief** with the scheduled-task tools, and update its schedule to the new time and time zone (for example `CRON_TZ=Europe/London 30 6 * * 1-5`). Keep its prompt as it is. If you can't change it from here, tell them to open the task's settings in Claude and change the time there.
+
+## 5. Offer a preview
+
+Offer to run "brief me now" so they can see the effect right away.

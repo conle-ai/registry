@@ -9,7 +9,7 @@
     {
       "name": "email-triage",
       "source": "./plugins/email-triage",
-      "description": "Daily email triage agent: reads unread Gmail against the last 3 business days and next 2 weeks of Google Calendar, then sends a text-sized WhatsApp debrief. Includes guided onboarding, briefing customization, and admin skills."
+      "description": "A short morning debrief of your inbox: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Runs inside Claude with your Gmail and Google Calendar connectors on a weekday schedule. Nothing to install on your computer."
     }
   ]
 }
