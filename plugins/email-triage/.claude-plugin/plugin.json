@@ -1,8 +1,8 @@
 {
   "name": "email-triage",
   "displayName": "Email Triage",
-  "version": "1.2.0",
-  "description": "A short morning debrief of your inbox, sent by iMessage and email at the first free gap in your calendar: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors on a weekday schedule.",
+  "version": "1.3.0",
+  "description": "A short morning debrief of your inbox, sent by iMessage and email at the first free gap in your calendar: what needs a reply, what needs work first, and what's at risk of being missed, linked to your calendar, plus today's events with a note from the latest related email. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors on a weekday schedule.",
   "author": {
     "name": "Conle",
     "url": "https://conle.ai"

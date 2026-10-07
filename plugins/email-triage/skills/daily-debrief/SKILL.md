@@ -1,6 +1,6 @@
 ---
 name: daily-debrief
-description: Produce the morning email debrief. Triage unread Gmail against Google Calendar, the owner's task board in Google Drive, their saved preferences and the last debrief, then write a phone-sized summary of what needs a reply, what needs work first and what's at risk of being missed, update the task board, and send the debrief to the owner by iMessage and email at the first free gap in their calendar. Read-only for email and calendar, apart from that one email to the owner. Used by the "Email debrief" scheduled task and by brief-me-now.
+description: Produce the morning email debrief. Triage unread Gmail against Google Calendar, the owner's task board in Google Drive, their saved preferences and the last debrief, then write a phone-sized summary of what needs a reply, what needs work first and what's at risk of being missed, with today's calendar events and a note from the latest related email, update the task board, and send the debrief to the owner by iMessage and email at the first free gap in their calendar. Read-only for email and calendar, apart from that one email to the owner. Used by the "Email debrief" scheduled task and by brief-me-now.
 ---
 
 # Daily email debrief
@@ -38,7 +38,7 @@ Connector tool names differ between Cowork, Dispatch and scheduled runs, so find
 | Send the debrief | the iMessage connector's send tool (`send_imessage`) and the Gmail connector's send tool (`mcp__Gmail__send_message`) |
 | Current date and time | a date/time tool, if there is one |
 
-Budget: under 50 tool calls in total.
+Budget: under 60 tool calls in total. Step 5a uses up to 8 of them.
 
 ## 1. Orient
 
@@ -83,7 +83,14 @@ If it fails, carry on without it, skip step 8, and add ` (task board unavailable
 
 List events on the `primary` calendar from 00:00 on the third business day back to 14 days ahead, in the owner's time zone, ordered by start time, page size 250. Skip cancelled events and events the owner declined.
 
-If the call fails, carry on without meeting links, and add ` (calendar unavailable)` to the first line of the debrief.
+Also keep **today's events** from this same call. Don't make a second calendar call. Today's events are events on the owner's today (owner's time zone) that start at or after now, plus all-day events dated today. Skip:
+
+- cancelled events and events the owner declined
+- **routine blocks**: the owner is the only attendee, and the same title is on every weekday in the listed range (for example a daily "Lunch" block)
+- events whose title matches a Mute entry
+- all of them when preferences.md has `Today's events: off`
+
+If the call fails, carry on without meeting links or today's events, and add ` (calendar unavailable)` to the first line of the debrief.
 
 ## 4. Find candidates
 
@@ -108,6 +115,17 @@ When reading:
 - Drop the debrief's own emails (from the owner, subject starting `Email debrief`). Don't count them anywhere.
 - Don't open obvious noise: newsletters, promotions, receipts, automated notifications.
 
+## 5a. Find the latest email for today's events
+
+Take the first 4 of today's events from step 3, earliest start first. These are the events the debrief lists (step 6). For each one:
+
+1. Make one Gmail search, newest first, page size 3: `newer_than:30d` plus `{from:<guest> to:<guest>}` for each guest other than the owner (at most 5 guests). When there are no guests, use 2 or 3 distinctive words from the title instead, for example `subject:(reunion Sam)`. Don't use generic words like "meeting", "call", "sync" or "reminder". When the title has no distinctive words, don't search.
+2. If a thread comes back, open the newest one with get-thread (plain text), unless step 5 already opened it. Each one counts toward the 25-thread limit in step 5.
+3. Take a one-line gist of its **latest** message: who wrote last and what is open, for example "Sam confirmed 19:00, asked you to bring the photos". If the owner wrote last, say so: "you confirmed Tue". Step 5's rule to drop threads where the owner wrote last doesn't apply here.
+4. No thread, or nothing useful in it: no gist. The event is still listed.
+
+Read threads in any state, not only unread ones. Search and read only, as for every other step.
+
 **Only threads you opened can become items.** Count the others on the FYI line, by kind where the preview makes it obvious (newsletters, receipts, notifications), otherwise as "other unread not reviewed".
 
 ## 6. Triage
@@ -127,6 +145,7 @@ Put each opened thread into one bucket:
 - **Repeats.** A thread's count is its count in the repeat memory plus 1, or 1 if it's new. Count 2: add `(again)`. Count 3 or more: put it under Don't miss and say how long it has waited ("waiting 4 days").
 - **Security notices** (new sign-in, verification codes, password resets) are noise unless something looks wrong, such as an unfamiliar device or a change the owner didn't make. Then use one short line, and never include the code.
 - **Task board.** Open cards that aren't from an email in this run still count. A card due within 2 days, or linked to a meeting in the next 2 days, goes under Do first (or Don't miss if overdue). Don't repeat a card that's already an item from its email. Skip `Waiting` cards unless they're overdue.
+- **Today's events.** Each event from step 5a is a Don't miss item, listed by start time, before the other Don't miss items. List at most 4. When there are more, add one line `+<n> more events today`. When an email item from step 5 is about the same event, merge it into the event's line and don't list it again.
 - **Signals.** Mail sent directly to the owner beats cc. The Updates category is usually noise, but bills, statements, bookings and deadlines hide there, so scan its subjects.
 
 ## 7. Write the debrief
@@ -145,10 +164,20 @@ Don't miss
 FYI: 14 newsletters, 4 receipts, 23 promotions/social
 ```
 
-- First line: `Morning <Owner>: <n> replies, <n> to do, <n> at risk`.
+- First line: `Morning <Owner>: <n> replies, <n> to do, <n> at risk`. Each listed event counts toward `at risk`. The `+<n> more events today` line doesn't.
 - Section headers are the plain words Reply, Do first and Don't miss. Skip empty sections.
-- At most 8 items in total, most urgent first. Merge items from the same thread or person.
+- At most 8 items in total, most urgent first. Merge items from the same thread or person. The `+<n> more events today` line doesn't count as an item.
 - Each item: sender's first name (plus company or role when it helps), the gist, the action, and the deadline or meeting.
+- Event lines: `<HH:MM> <title>: <gist or action>`, with `All day` in place of the time for all-day events. Shorten a long title to keep the line under 140 characters. With no gist, the line is only the time and title. For example:
+
+```
+Don't miss
+- 19:00 Dinner with Sam: Sam confirmed, wants you to pick the place
+- 20:00 Street cleaning: move the car before 20:00
+- All day Pay card bill: due today
++2 more events today
+```
+
 - **Never include** links, email addresses, phone numbers, codes, account numbers or quoted email text.
 - If there's a task board, the second-to-last line is `Board: <n> open, <n> done since last debrief`.
 - Last line: `FYI:` with the counts of everything not listed, by kind.
@@ -186,10 +215,12 @@ Scheduled entry:
 <the debrief text, exactly as written>
 
 surfaced: <threadId> x1, <threadId> x3
+events: <threadId>
 delivery: pending
 ```
 
 - `surfaced:` lists the thread id behind each item, with its count from step 6.
+- `events:` lists the gist thread ids from step 5a, without counts, or `none`. They stay out of `surfaced:` so they never change the repeat memory. An event with no thread adds nothing.
 - On-demand entries end the heading with `on demand` and list `surfaced:` thread ids **without counts**. They never change the repeat memory.
 - `delivery:` starts as `pending` when step 10 will send, and step 10 replaces it with the result. On-demand runs that aren't sent use `delivery: shown in chat`.
 - Never store email bodies, addresses or codes in the log.

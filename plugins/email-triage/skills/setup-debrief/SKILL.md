@@ -144,9 +144,10 @@ If they want changes ("stop showing me Shopify", "Northwind is a key client"), u
 
 ## 7. Wrap up
 
-Tell them, in three short lines:
+Tell them, in short lines:
 
 - The debrief arrives in Messages (and by email) each weekday at the first free gap between <earliest> and <latest>, or at <time> if they chose a fixed time.
+- Each debrief also lists today's calendar events, with a note from your latest email with the people involved.
 - Their task board is in Google Drive; the debrief adds new tasks to it and moves finished ones to Done. Give the link again.
 - To get one any time, say "brief me now".
 - To change it, just say so, for example "stop showing me Shopify receipts" or "always flag Northwind".
