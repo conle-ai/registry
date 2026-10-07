@@ -7,7 +7,7 @@ description: One-time setup of the morning email debrief. Checks the Gmail, Goog
 
 You're setting up a daily email debrief for a busy, possibly non-technical person, often with their consultant beside them. Go one step at a time. Say in one sentence why each step matters, do the work yourself, check it worked, then move on. Keep messages short and free of jargon. Never ask for a password or code.
 
-During setup you may only: search and read email, list calendar events, read and write the two project docs, search and read Drive files, create and write the one task board spreadsheet, send test iMessages to the owner's own address, and list, create, update and fire the one **Email debrief** scheduled task. The read-only rules in the daily-debrief skill apply to everything else.
+During setup you may only: search and read email, list calendar events, read and write the two project docs, search and read Drive files, create and write the one task board spreadsheet, send test iMessages and one test email to the owner's own addresses, and list, create, update and fire the one **Email debrief** scheduled task. The read-only rules in the daily-debrief skill apply to everything else.
 
 ## 1. Check you're in the Email Debrief project
 
@@ -20,7 +20,7 @@ Call the Projects tool's info method.
 
 Make one cheap read on each:
 
-- Gmail: search `is:unread in:inbox`, page size 1.
+- Gmail: search `is:unread in:inbox`, page size 1. Also look for its send tool, which delivers the debrief by email. If there's none, say the debrief will come by iMessage only and carry on.
 - Calendar: list today's events on the primary calendar, page size 1.
 - Google Drive: list recent files, page size 1.
 - Google Sheets: look for the connector's tools. There's nothing to read yet.
@@ -40,9 +40,11 @@ Use AskUserQuestion when it's available. Otherwise ask in one short message.
 1. What should the debrief call you?
 2. Who should it always flag? People, companies or email domains, for example key clients, press and your assistant.
 3. What should it ignore? Newsletters, tools, notification senders or topics.
-4. When should it arrive? The default is weekdays at 07:00. Confirm the time zone too, and suggest the calendar's.
+4. When should it arrive? The default is **at the first free gap in your calendar, between 08:30 and 12:00 on weekdays**: if you're in a meeting at 8:30, it waits until the meeting ends, so it arrives when you can read it. 12:00 is the latest; it goes then even if you're busy. They can change both times, or pick one fixed time instead. With iMessage, the times follow the Mac's clock, so when they travel the debrief arrives at 08:30 to 12:00 where they are. Confirm their home time zone too, and suggest the calendar's.
 5. Only if iMessage is available: what phone number or Apple ID email should the debrief be texted to? Offer to look them up in Contacts with the iMessage connector's contact search, and read the number back to confirm it.
 6. Do you already keep a task list? It can be a file in Google Drive (a Doc, Sheet, Word file or PDF), or they can paste it here. If not, a fresh board is fine.
+
+7. Should it also come by email? Suggest yes, to their own work address (the Gmail account that's connected). Skip this if Gmail has no send tool.
 
 Don't invent answers. "Nothing yet" is fine. They can add more later just by saying it.
 
@@ -61,7 +63,9 @@ If creating the board fails, say so in one line, leave the `Task board:` line ou
 
 ## 3c. Test iMessage
 
-Only if they gave an address in question 5. Send one test message to it: `Email debrief is set up. Your debrief will arrive here each weekday at <time>.` Ask them to confirm it arrived on their phone. If it didn't, check the number with them once and try again, then carry on with notifications only if it still fails.
+Only if they gave an address in question 5. Send one test message to it: `Email debrief is set up. Your debrief will arrive here each weekday at <when>.`, where <when> is `the first free gap in your calendar between <earliest> and <latest>`, or the fixed time Ask them to confirm it arrived on their phone. If it didn't, check the number with them once and try again, then carry on with notifications only if it still fails.
+
+If they want it by email too, send one test email the same way to the address from question 7, subject `Email debrief is set up`, and ask them to confirm it arrived.
 
 ## 4. Save the two project docs
 
@@ -72,10 +76,11 @@ Write two docs with the Projects tool.
 ```
 # Email debrief preferences
 Owner: <name>
-Time zone: <IANA time zone, for example Europe/London>
-Run time: weekdays <HH:MM>
+Time zone: follow this Mac (<home IANA time zone, for example Europe/London>)
+Delivery: first free gap, weekdays <HH:MM> to <HH:MM>
 Max length: 1000 characters
 Deliver to: iMessage <phone number or Apple ID email>
+Email to: <their own email address>
 Task board: Email Debrief Task Board (<spreadsheet id>)
 
 ## Always flag
@@ -88,7 +93,7 @@ Task board: Email Debrief Task Board (<spreadsheet id>)
 - <plain sentences, for example "Press requests with a date go in Do first">
 ```
 
-If a section has nothing in it, give it the single line `- (none yet)`. Use `Deliver to: notification only` when there's no iMessage address, and leave out the `Task board:` line when there's no board.
+If a section has nothing in it, give it the single line `- (none yet)`. Use `Deliver to: notification only` when there's no iMessage address. Without iMessage the task runs in the cloud and can't see the Mac, so write `Time zone: <IANA time zone>` instead. Leave out the `Email to:` line when they don't want email, and the `Task board:` line when there's no board. If they chose one fixed time instead of the free gap, write `Run time: weekdays <HH:MM>` in place of the `Delivery:` line.
 
 `debrief-log.md` (keep an existing one when they chose to keep their preferences):
 
@@ -112,9 +117,9 @@ First list the scheduled tasks. If one named **Email debrief** already exists, u
 | Setting | Value |
 |---|---|
 | Name | `Email debrief` |
-| Schedule | Weekdays at their time, in their time zone, for example `CRON_TZ=Europe/London 0 7 * * 1-5`. If the tool suggests a few minutes before the hour, accept that, and tell them the exact time. |
-| Prompt | `Run the email-triage:daily-debrief skill for this morning's scheduled debrief. Email and calendar are read-only: never send, reply, forward, draft, label, archive, move, trash, delete, mark read or spam, and never create, change, respond to or delete calendar events. The only writes allowed are the task board saved in preferences, the debrief log, and one iMessage to the owner's saved address. Use no other tools.` |
-| Notifications | Push on |
+| Schedule | **Free gap:** every 30 minutes on weekdays, from the hour of the earliest time to the hour of the latest. For 08:30 to 12:00: `0,30 8-12 * * 1-5`. Runs outside the window end at once. **Fixed time:** weekdays at that time, for example `0 7 * * 1-5`. **On this computer (iMessage), give no time zone (no `CRON_TZ`)**: the Mac's scheduler then uses the Mac's local time, which changes when they travel. **In the cloud,** prefix their time zone, for example `CRON_TZ=Europe/London 0,30 8-12 * * 1-5`. If the tool suggests a few minutes off the hour, accept that, and tell them the exact times. |
+| Prompt | `Run the email-triage:daily-debrief skill for this morning's scheduled debrief. Email and calendar are read-only: never send, reply, forward, draft, label, archive, move, trash, delete, mark read or spam, and never create, change, respond to or delete calendar events. The only writes allowed are the task board saved in preferences, the debrief log, one iMessage to the owner's saved address, and one email to the owner's saved Email to address. Use no other tools, apart from the one date command the skill allows for the time zone.` |
+| Notifications | **Free gap:** push off, because most runs only check the calendar and end, and the debrief itself comes by iMessage or email. Use push on only if neither iMessage nor email is set up, and then use a fixed time. **Fixed time:** push on. |
 | Connectors | Gmail, Google Calendar, Google Drive, Google Sheets, iMessage (when used) and the Email Debrief project, if the task lets you choose |
 
 After saving it:
@@ -125,7 +130,9 @@ After saving it:
 
 ## 6. Run the first debrief through the task
 
-Fire the task once. This checks the whole path: the run, the project, and the phone notification.
+Fire the task once. This checks the whole path: the run, the project, the calendar and the delivery.
+
+If the task ends with `Waiting for the delivery window.` or `Waiting for a free gap.`, the task works; it's just outside the window, or they're in a meeting now. Tell them that, then run the daily-debrief skill here as an **on-demand** run and send it, so they still get a first debrief.
 
 1. Tell them it takes about a minute and the debrief should arrive in Messages on their phone (or as a notification, without iMessage).
 2. Read `debrief-log.md`. A new entry dated today and marked `scheduled` means the task can use the project. Show its debrief text here. If it isn't there yet, wait for them to say the notification arrived, then check once more.
@@ -139,7 +146,7 @@ If they want changes ("stop showing me Shopify", "Northwind is a key client"), u
 
 Tell them, in three short lines:
 
-- The debrief arrives in Messages (or as a notification) each weekday at <time>.
+- The debrief arrives in Messages (and by email) each weekday at the first free gap between <earliest> and <latest>, or at <time> if they chose a fixed time.
 - Their task board is in Google Drive; the debrief adds new tasks to it and moves finished ones to Done. Give the link again.
 - To get one any time, say "brief me now".
 - To change it, just say so, for example "stop showing me Shopify receipts" or "always flag Northwind".
