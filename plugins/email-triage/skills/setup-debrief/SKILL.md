@@ -78,7 +78,7 @@ Write two docs with the Projects tool.
 Owner: <name>
 Time zone: follow this Mac (<home IANA time zone, for example Europe/London>)
 Delivery: first free gap, weekdays <HH:MM> to <HH:MM>
-Max length: 1000 characters
+Max length: 1200 characters
 Deliver to: iMessage <phone number or Apple ID email>
 Email to: <their own email address>
 Task board: Email Debrief Task Board (<spreadsheet id>)
