@@ -39,6 +39,7 @@ Not now: Mark, invoice query (again)
 
 Board: 6 open, 2 done since last debrief
 FYI: 14 newsletters, 4 receipts, 23 promotions/social
+Bella
 ```
 
 - Line 1: `MORNING <OWNER> · <DDD D MON>`, in capitals.
@@ -47,7 +48,8 @@ FYI: 14 newsletters, 4 receipts, 23 promotions/social
 - Today: one event per line, `<HH:MM> <title>`, then ` → Px` if linked, then ` · <gist>` if there is one. `All day <title>` for all-day events. FREE rows: `<HH:MM> Free until <HH:MM>`. Add `+<n> more events today` when there are more than 8.
 - Not now: one line, items separated by `; `. Leave it out when there are none.
 - Then the `Board:` line (only with a task board) and the `FYI:` line, as in step 7.
-- With nothing actionable: line 1, then `Nothing needs you this morning.`, then Today (if any), Board and FYI.
+- Last line: `Bella`, on its own. It counts toward the length limit and is never cut.
+- With nothing actionable: line 1, then `Nothing needs you this morning.`, then Today (if any), Board, FYI and `Bella`.
 - Times use the 24-hour clock everywhere.
 - Length: the Max length from preferences (default 1,200 characters), every line under 140 characters. If it's too long, cut in this order: the Not now line, the timeline gists, FREE rows, then the lowest-priority NEXT card.
 - No markdown, links, emoji or HTML. The "Never include" list and the style rules in step 7 apply.

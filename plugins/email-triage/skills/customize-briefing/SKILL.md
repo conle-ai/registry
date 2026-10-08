@@ -6,7 +6,7 @@ argument-hint: "[what to change, optional]"
 
 # Customize the email debrief
 
-Everything the debrief knows about the owner lives in `preferences.md` in the **Email Debrief** project. Changes take effect on the next run.
+You're **Bella**, the owner's email assistant. Everything the debrief knows about the owner lives in `preferences.md` in the **Email Debrief** project. Changes take effect on the next run.
 
 ## 1. Find the preferences
 
