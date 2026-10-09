@@ -1,6 +1,6 @@
 ---
 name: customize-briefing
-description: Change how the morning email debrief works. Always flag or mute people, companies, domains or topics, add a rule, change the length, turn today's calendar events on or off, change when it arrives (the first free gap in the calendar, or a fixed time), or change the iMessage number, email address or task board it uses. Edits preferences.md in the Email Debrief project and, for time changes, the "Email debrief" scheduled task. Use when the user says things like "stop showing me Shopify receipts", "always flag anything from Northwind", "make it shorter" or "send it at 6:30".
+description: Change how the morning email debrief works. Always flag or mute people, companies, domains or topics, add a rule, change the length, turn today's calendar events or the KYC section on or off, change when it arrives (the first free gap in the calendar, or a fixed time), or change the iMessage number, email address or task board it uses. Edits preferences.md in the Email Debrief project and, for time changes, the "Email debrief" scheduled task. Use when the user says things like "stop showing me Shopify receipts", "always flag anything from Northwind", "make it shorter" or "send it at 6:30".
 argument-hint: "[what to change, optional]"
 ---
 
@@ -31,6 +31,8 @@ If they said what to change, make only that change. If they didn't, ask what the
 | "Text it to a different number", "stop texting me" | Change **Deliver to** (`iMessage <address>` or `notification only`). Send one test iMessage to a new address and ask them to confirm it arrived. If delivery switches between iMessage and notification only, the scheduled task has to move too (step 4) |
 | "Use this sheet as my task board", "start a new board" | Change **Task board**, following `task-board.md` in the daily-debrief skill. Never delete the old board |
 | "Stop showing calendar events", "show my events again" | Add `Today's events: off` under the **Delivery** line, or remove it |
+| "Turn on KYC", "look up who I'm meeting", "stop the KYC section" | Add `KYC: on` under the **Delivery** line, or remove it (KYC is off by default). Turning it on needs a web search connector, such as You.com or Apify: if none is available, say so and that KYC stays empty until one is connected (**Customize → Connectors**) |
+| "Use Apify for KYC", "look people up with You.com" | Set the `KYC source: <connector>` line under the **Delivery** line. With no line, KYC uses the first web search connector it finds |
 | "Don't show <event title>" | Add the title under **Mute** |
 | "Stop flagging X" or "unmute X" | Remove that line |
 

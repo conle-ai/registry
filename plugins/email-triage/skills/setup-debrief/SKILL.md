@@ -118,9 +118,9 @@ First list the scheduled tasks. If one named **Email debrief** already exists, u
 |---|---|
 | Name | `Email debrief` |
 | Schedule | **Free gap:** every 30 minutes on weekdays, from the hour of the earliest time to the hour of the latest. For 08:30 to 12:00: `0,30 8-12 * * 1-5`. Runs outside the window end at once. **Fixed time:** weekdays at that time, for example `0 7 * * 1-5`. **On this computer (iMessage), give no time zone (no `CRON_TZ`)**: the Mac's scheduler then uses the Mac's local time, which changes when they travel. **In the cloud,** prefix their time zone, for example `CRON_TZ=Europe/London 0,30 8-12 * * 1-5`. If the tool suggests a few minutes off the hour, accept that, and tell them the exact times. |
-| Prompt | `Run the email-triage:daily-debrief skill for this morning's scheduled debrief. Email and calendar are read-only: never send, reply, forward, draft, label, archive, move, trash, delete, mark read or spam, and never create, change, respond to or delete calendar events. The only writes allowed are the task board saved in preferences, the debrief log, one iMessage to the owner's saved address, and one email to the owner's saved Email to address. Use no other tools, apart from the one date command the skill allows for the time zone.` |
+| Prompt | `Run the email-triage:daily-debrief skill for this morning's scheduled debrief. Email and calendar are read-only: never send, reply, forward, draft, label, archive, move, trash, delete, mark read or spam, and never create, change, respond to or delete calendar events. The only writes allowed are the task board saved in preferences, the debrief log, one iMessage to the owner's saved address, and one email to the owner's saved Email to address. Use no other tools, apart from the one date command the skill allows for the time zone and one web search connector for the KYC step when it's on.` |
 | Notifications | **Free gap:** push off, because most runs only check the calendar and end, and the debrief itself comes by iMessage or email. Use push on only if neither iMessage nor email is set up, and then use a fixed time. **Fixed time:** push on. |
-| Connectors | Gmail, Google Calendar, Google Drive, Google Sheets, iMessage (when used) and the Email Debrief project, if the task lets you choose |
+| Connectors | Gmail, Google Calendar, Google Drive, Google Sheets, a web search connector such as You.com or Apify (only when KYC is on), iMessage (when used) and the Email Debrief project, if the task lets you choose |
 
 After saving it:
 
@@ -148,6 +148,7 @@ Tell them, in short lines, as Bella:
 
 - The debrief arrives in Messages (and by email) each weekday at the first free gap between <earliest> and <latest>, or at <time> if they chose a fixed time.
 - Each debrief also lists today's calendar events, with a note from your latest email with the people involved.
+- Optional: say "turn on KYC" to add a short note on who you're meeting today (background, persona and what likely motivates them) from their public LinkedIn, X and Instagram profiles. It needs a web search connector, such as You.com or Apify.
 - Their task board is in Google Drive; the debrief adds new tasks to it and moves finished ones to Done. Give the link again.
 - To get one any time, say "brief me now" (or "Bella, brief me now").
 - To change it, just say so, for example "stop showing me Shopify receipts" or "always flag Northwind".

@@ -9,7 +9,7 @@
     {
       "name": "email-triage",
       "source": "./plugins/email-triage",
-      "description": "Bella, your email assistant: a short morning debrief of your inbox, sent at the first free gap in your calendar: what needs a reply, what needs work first, and what's at risk of being missed, with your top three as NOW and NEXT and today's events on a timeline. Plain text by iMessage and a designed daily planner email. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors on a weekday schedule."
+      "description": "Bella, your email assistant: a short morning debrief of your inbox, sent at the first free gap in your calendar: what needs a reply, what needs work first, and what's at risk of being missed, with your top three as NOW and NEXT, today's events on a timeline, and, if you turn it on, a KYC note on who you're meeting from their public profiles. Plain text by iMessage and a designed daily planner email. Keeps a kanban task board in your Google Drive up to date with each debrief. Runs inside Claude with your Gmail, Google Calendar, Drive and iMessage connectors (plus a web search connector such as You.com or Apify for KYC) on a weekday schedule."
     }
   ]
 }

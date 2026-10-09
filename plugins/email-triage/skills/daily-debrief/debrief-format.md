@@ -15,6 +15,7 @@ Pick these before writing either version.
 - **Big Three.** The 3 most urgent items from Reply, Do first and Don't miss, most urgent first. Event items go in the timeline, not here, unless the action is due before the event starts. Give them P1, P2, P3. P1 is `NOW`. P2 and P3 are `NEXT`. Fewer items, fewer cards.
 - **Not now.** The other listed items, most urgent first. Together with the Big Three, at most 8 items. These are not dropped: they come after the Big Three.
 - **Timeline.** Today's events from step 3, all-day events first, then by start time, at most 8 event rows (FREE rows don't count). The first 4 have the gist from step 5a. Add `→ Px` when a Big Three item is linked to that event. Add a FREE row for each gap of 30 minutes or more between now and the end of the last event. Leave the timeline out when there are no events today or preferences say `Today's events: off`.
+- **KYC.** The people from step 5b, in meeting order, at most 4. Leave it out whenever step 5b didn't run (KYC is off by default) or found no guests to look up.
 - **Counts.** Replies, to do and at risk, counted as in step 7.
 
 ## Text version (iMessage)
@@ -35,6 +36,10 @@ Today
 15:00 Studio walkthrough · you confirmed Tue
 19:00 Dinner with Sam · Sam wants you to pick the place
 
+KYC
+Dana Reyes (Northwind, 10:00): VP Marketing, ex-agency. Posts on retail data. Likely wants Q3 proof of reach.
+Lee Park (15:00): no public profile found
+
 Not now: Mark, invoice query (again)
 
 Board: 6 open, 2 done since last debrief
@@ -46,12 +51,13 @@ Bella
 - Line 2: `<n> replies, <n> to do, <n> at risk.` then the narrative: one sentence, 20 words or fewer, that says what to do first and why.
 - Big Three: the NOW card has 3 lines (title, `Done when:`, time box). NEXT cards are one line: title, then the deadline or meeting after a comma.
 - Today: one event per line, `<HH:MM> <title>`, then ` → Px` if linked, then ` · <gist>` if there is one. `All day <title>` for all-day events. FREE rows: `<HH:MM> Free until <HH:MM>`. Add `+<n> more events today` when there are more than 8.
+- KYC: the heading `KYC`, then one line per person: `<Name> (<Company>, <HH:MM>): <background>. <persona>. <motivation>.` Leave out the company when it isn't known. Add ` (match unsure)` at the end when step 5b says so. Not found: `<Name> (<Company>, <HH:MM>): no public profile found` (or `no name to search`). Add `+<n> more guests not looked up` when step 5b capped the list.
 - Not now: one line, items separated by `; `. Leave it out when there are none.
 - Then the `Board:` line (only with a task board) and the `FYI:` line, as in step 7.
 - Last line: `Bella`, on its own. It counts toward the length limit and is never cut.
 - With nothing actionable: line 1, then `Nothing needs you this morning.`, then Today (if any), Board, FYI and `Bella`.
 - Times use the 24-hour clock everywhere.
-- Length: the Max length from preferences (default 1,200 characters), every line under 140 characters. If it's too long, cut in this order: the Not now line, the timeline gists, FREE rows, then the lowest-priority NEXT card.
+- Length: the Max length from preferences (default 1,200 characters), every line under 140 characters. The KYC section is not counted toward the Max length, because step 5b caps it at 4 people, but each KYC line is still under 140 characters: shorten the persona first. If the rest is too long, cut in this order: the Not now line, the timeline gists, FREE rows, then the lowest-priority NEXT card.
 - No markdown, links, emoji or HTML. The "Never include" list and the style rules in step 7 apply.
 
 ## HTML version (email)
@@ -96,4 +102,13 @@ Bella
      - Free gaps use the FREE row below the repeat block: copy it into place in time order. Delete the unused FREE row at the end.
      - On the last row, change `border-left:1px solid #E0D9CD` to `border-left:1px solid transparent`.
      - No timeline: delete the whole `<!-- Timeline -->` row, from its `<tr>` to its `</tr>`.
+   - `kyc`, one row per person from the text version's KYC section, in the same order:
+     - `{{person_name}}`: the full name.
+     - `{{person_context}}`: company, meeting time and title, joined by ` &middot; `: `Northwind &middot; 10:00 Quarterly review`. Leave out what isn't known.
+     - `{{background}}`, `{{persona}}`, `{{motivation}}`: the three parts of the descriptor from step 5b, a little fuller than the text line if it helps, each 25 words or fewer.
+     - `{{match_line}}`: the networks used, then the match: `LinkedIn, X &middot; Match confident`, or `LinkedIn &middot; Match unsure: name and city only`.
+     - No profile found, or no name to search: delete the three lines between `OPTIONAL (profile found)` and `END OPTIONAL`, and use `{{match_line}}` for `No public profile found` or `No name to search`.
+     - On every row, delete the `OPTIONAL` and `END OPTIONAL` comments.
+     - `{{kyc_more_line}}`: `+<n> more guests not looked up`. When the list wasn't capped, delete that paragraph and its two comments.
+     - No KYC section in the text version (the default): delete the whole `<!-- KYC -->` row, from its `<tr>` to its `</tr>`. Its spacing is inside that row, so no gap is left.
 5. **Check before sending.** Search the result for `{{`, `}}`, `BEGIN REPEAT` and `END REPEAT`. If any remain, fix them. The finished HTML must be under 100 KB. Never send HTML with an unfilled placeholder: send the text version as a plain-text email instead and add `HTML email not built.` to the final message.
